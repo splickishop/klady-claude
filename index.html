@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CryptoKlad — Kripto Sportska Kladionica</title>
+<title>Kripto Kladionica — USDT | NO-KYC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:     #07090d;
@@ -26,7 +26,7 @@
     --text3:  #3d5468;
     --fDisplay: 'Bebas Neue', sans-serif;
     --fBody:    'Outfit', sans-serif;
-    --fMono:    'Space Mono', monospace;
+    --fMono:    'JetBrains Mono', monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -349,14 +349,17 @@
   .extra-markets{display:none;}
   .extra-markets.open{display:block;}
   .more-btn{
-    width:100%;margin-top:8px;padding:7px;
-    background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
-    color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;
-    font-family:var(--fBody);transition:all .15s;letter-spacing:.5px;
-    text-transform:uppercase;
+    width:100%;margin-top:10px;padding:9px;
+    background:rgba(0,229,160,.06);
+    border:1px solid var(--accent2);border-radius:8px;
+    color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;
+    font-family:var(--fBody);transition:all .18s;letter-spacing:.8px;
+    text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:6px;
   }
-  .more-btn:hover{border-color:var(--accent2);color:var(--accent);}
-  .more-btn.open{border-color:var(--border2);color:var(--text2);}
+
+  .more-btn:hover{background:rgba(0,229,160,.12);border-color:var(--accent);}
+  .more-btn.open{background:var(--bg3);border-color:var(--border2);color:var(--text2);}
+  .more-btn.open::before{content:'－';}
 
   ::-webkit-scrollbar{width:5px;}
   ::-webkit-scrollbar-track{background:var(--bg2);}
@@ -372,7 +375,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo">CRYPTO<span>KLAD</span></div>
+  <div class="logo">KRIPTO <span>KLADIONICA</span></div>
   <div class="nav-right" id="navRight">
     <button class="btn btn-ghost" onclick="openM('mLogin')">Prijava</button>
     <button class="btn btn-accent" onclick="openM('mReg')">Registracija</button>
@@ -382,17 +385,17 @@
 <main>
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">⚡ Kripto &nbsp;•&nbsp; Brzo &nbsp;•&nbsp; Anonimno</div>
-  <h1>KLADI SE<br><span class="g">KRIPTOM</span></h1>
-  <p>Moderna sportska kladionica s USDT isplatama. Bez dokumenata, bez čekanja — potpuno anonimno.</p>
-  <button class="btn btn-accent" style="font-size:16px;padding:14px 38px;" onclick="openM('mReg')">Počni klađenje →</button>
+  <div class="hero-badge">⚡ Brzo &nbsp;•&nbsp; Sigurno &nbsp;•&nbsp; Anonimno</div>
+  <h1>IGRAJ PAMETNO<br><span class="g">IGRAJ KRIPTOM.</span></h1>
+  <p>Sportska kladionica nove generacije.<br>USDT isplate, BEZ dokumenata, potpuna anonimnost — klađenje kako treba biti.</p>
+  <button class="btn btn-accent" style="font-size:16px;padding:14px 38px;" onclick="window._ctaClick()">Počni odmah →</button>
 </div>
 
 <!-- TRUST -->
 <div class="trust-row">
   <div class="trust-card">
     <span class="ico">🕵️</span>
-    <div><strong>NO-KYC</strong><p>Nikad ne tražimo osobne podatke ni dokumente — ni pri uplati ni pri isplati. Uvijek.</p></div>
+    <div><strong>NO-KYC</strong><p>Nikad ne tražimo osobne podatke ni dokumente — ni pri uplati ni pri isplati. NIKAD.</p></div>
   </div>
   <div class="trust-card">
     <span class="ico">🔒</span>
@@ -516,7 +519,7 @@
 
 <!-- FOOTER -->
 <footer style="text-align:center;padding:32px 20px;border-top:1px solid var(--border);margin-top:40px;position:relative;z-index:1">
-  <div style="font-family:var(--fDisplay);font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:8px">CRYPTO<span style="color:var(--text)">KLAD</span></div>
+  <div style="font-family:var(--fDisplay);font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:8px">KRIPTO <span style="color:var(--text)">KLADIONICA</span></div>
   <p style="font-size:13px;color:var(--text3);margin-bottom:12px">NO-KYC · Anonimno · USDT isplate</p>
   <a href="/cdn-cgi/l/email-protection#8bf8fbe7e2e8e0e2f8e3e4fbcbece6eae2e7a5e8e4e6" style="display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:8px 16px;color:var(--text2);text-decoration:none;font-size:13px">
     ✉️ Kontakt podrška: <span class="__cf_email__" data-cfemail="3043405c59535b5943585f4070575d51595c1e535f5d">[email&#160;protected]</span>
@@ -537,9 +540,41 @@ const USDT_ADDR     = 'TKUYaSzrwNGzvLD8zknuEqSKK1NaBNV2sn';
 const ADMIN_EMAIL   = 'splickishop@gmail.com';
 const SUPPORT_EMAIL = 'splickishop@gmail.com';
 const SHEETS_URL    = 'https://script.google.com/macros/s/AKfycbzyEP6-ogymrYLW8iJn291sTbLV-a5m7dUJbcS42cLsFZ9jAY_u8Eu87wyIkQucf0Ou/exec';
-const MIN_DEPOSIT   = 10;   // USDT
-const MIN_WITHDRAW  = 10;   // USDT
-const FEE_PCT       = 2;    // % provizija mjenjačnice (primjenjuje se na uplatu i isplatu)
+const MIN_DEPOSIT   = 10;
+const MIN_WITHDRAW  = 10;
+const FEE_PCT       = 2;
+
+// ── Currency ──────────────────────────────────────────────────────────────────
+let currencyMode = localStorage.getItem('ck_currency') || 'USDT'; // 'USDT' | 'EUR'
+let eurRate = 0.92; // fallback
+
+async function fetchEurRate() {
+  try {
+    const r = await fetch('https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd/eur.json');
+    const d = await r.json();
+    if (d.eur) { eurRate = d.eur; console.log('EUR rate:', eurRate); }
+  } catch(e) {
+    console.warn('EUR rate fetch failed, using fallback:', eurRate);
+  }
+}
+
+function fmt(usdt) {
+  if (currencyMode === 'EUR') {
+    return '€ ' + (usdt * eurRate).toFixed(2);
+  }
+  return '₮ ' + usdt.toFixed(2);
+}
+
+function currSymbol() { return currencyMode === 'EUR' ? '€' : '₮'; }
+function toDisplay(usdt) { return currencyMode === 'EUR' ? +(usdt * eurRate).toFixed(2) : usdt; }
+function toUsdt(display) { return currencyMode === 'EUR' ? display / eurRate : display; }
+
+function toggleCurrency() {
+  currencyMode = currencyMode === 'USDT' ? 'EUR' : 'USDT';
+  localStorage.setItem('ck_currency', currencyMode);
+  updateNav();
+  updateFab();
+}
 
 // ── Firebase ──────────────────────────────────────────────────────────────────
 const _app  = initializeApp({
@@ -639,7 +674,25 @@ function updateNav() {
   if (currentUser) {
     const ini = currentUser.email.charAt(0).toUpperCase();
     nr.innerHTML =
-      '<div class="wallet-chip" onclick="window._openWallet()">₮ <strong>'+(currentUser.balance||0).toFixed(2)+'</strong></div>'
+      '<button onclick="window._toggleCurrency()" style="'
+      +'display:flex;align-items:center;gap:0;cursor:pointer;'
+      +'background:var(--card2);border:1px solid var(--border2);border-radius:20px;'
+      +'padding:0;overflow:hidden;flex-shrink:0">'
+      +'<span style="padding:6px 13px;font-size:13px;font-weight:700;font-family:var(--fMono);transition:all .15s;'
+      +(currencyMode==='USDT'
+        ? 'background:var(--accent);color:#000;border-radius:20px 0 0 20px;'
+        : 'background:transparent;color:var(--text3);')
+      +'">₮</span>'
+      +'<span style="padding:6px 13px;font-size:13px;font-weight:700;font-family:var(--fMono);transition:all .15s;'
+      +(currencyMode==='EUR'
+        ? 'background:var(--accent);color:#000;border-radius:0 20px 20px 0;'
+        : 'background:transparent;color:var(--text3);')
+      +'">€</span>'
+      +'</button>'
+      +'<div class="wallet-chip" onclick="window._openWallet()">'
+      +'<span style="opacity:.7;font-size:11px">'+currSymbol()+'</span> '
+      +'<strong>'+toDisplay(currentUser.balance||0).toFixed(2)+'</strong>'
+      +'</div>'
       +'<button class="btn btn-gold" style="padding:6px 14px;font-size:13px" onclick="window._openDeposit()">↑ Uplata</button>'
       +'<div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text2)">'
         +'<div class="user-dot">'+ini+'</div>'
@@ -665,6 +718,7 @@ const FLAGS = {
   tr: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"><rect width="30" height="20" fill="#E30A17"/><circle cx="10" cy="10" r="6" fill="#fff"/><circle cx="12" cy="10" r="4.8" fill="#E30A17"/><polygon points="18,10 22,8.5 20.5,12 20.5,8 22,11.5" fill="#fff"/></svg>`,
   hr: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="0.667" fill="#FF0000"/><rect y="0.667" width="3" height="0.667" fill="#fff"/><rect y="1.333" width="3" height="0.667" fill="#0000CD"/></svg>`,
   gb: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg>`,
+  en: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="#fff"/><rect x="26" width="8" height="30" fill="#CF142B"/><rect y="11" width="60" height="8" fill="#CF142B"/></svg>`,
   us: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10"><rect width="19" height="10" fill="#B22234"/><rect y="1.54" width="19" height="1.54" fill="#fff"/><rect y="3.08" width="19" height="1.54" fill="#B22234"/><rect y="4.62" width="19" height="1.54" fill="#fff"/><rect y="6.15" width="19" height="1.54" fill="#B22234"/><rect y="7.69" width="19" height="1.54" fill="#fff"/><rect width="7.6" height="5.38" fill="#3C3B6E"/></svg>`,
   br: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14"><rect width="20" height="14" fill="#009c3b"/><polygon points="10,1 19,7 10,13 1,7" fill="#FEDF00"/><circle cx="10" cy="7" r="3" fill="#002776"/></svg>`,
   be: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" fill="#000"/><rect x="1" width="1" height="2" fill="#FAE042"/><rect x="2" width="1" height="2" fill="#ED2939"/></svg>`,
@@ -682,7 +736,8 @@ function leagueFlag(nat) {
   const n = nat.toLowerCase();
   if (n.includes('serie a') || n.includes('coppa'))              return flagSvg('it');
   if (n.includes('la liga') || n.includes('laliga') || n.includes('copa del rey') || n.includes('primera')) return flagSvg('es');
-  if (n.includes('premier league') || n.includes('fa cup') || n.includes('carabao')) return flagSvg('gb');
+  if (n.includes('premier league') || n.includes('fa cup') || n.includes('carabao')) return flagSvg('en');
+  if (n.includes('championship') || n.includes('league one') || n.includes('league two')) return flagSvg('en');
   if (n.includes('bundesliga') || n.includes('dfb'))             return flagSvg('de');
   if (n.includes('ligue 1') || n.includes('ligue 2') || n.includes('coupe de france')) return flagSvg('fr');
   if (n.includes('primeira liga') || n.includes('liga portugal')) return flagSvg('pt');
@@ -921,7 +976,7 @@ function cardHTML(m) {
   }
   const extraBlock = hasExtra && !done
     ? '<div class="extra-markets" id="extra_'+m.id+'">'+extraMarkets+'</div>'
-      +'<button class="more-btn" onclick="window._toggleExtra(''+m.id+'',this)">+ Više opcija klađenja</button>'
+      +'<button class="more-btn" data-mid="'+m.id+'" onclick="window._toggleExtra(this.dataset.mid,this)">+ Više opcija klađenja</button>'
     : (done ? extraMarkets : '');
   const markets = mainMarket + extraBlock;
 
@@ -1034,10 +1089,10 @@ function renderSlip() {
     +'<div class="slip-total">'
     +'<div class="str"><span>Broj oklade</span><span>'+slip.length+'×</span></div>'
     +'<div class="str"><span>Ukupna kvota</span><span style="color:var(--accent);font-family:var(--fMono)">'+tot.toFixed(2)+'</span></div>'
-    +'<div class="str big"><span>Stanje računa</span><span class="v">₮ '+bal.toFixed(2)+'</span></div>'
+    +'<div class="str big"><span>Stanje računa</span><span class="v">'+fmt(bal)+'</span></div>'
     +'</div>'
     +'<div class="fg" style="margin-top:15px"><label class="fl">Iznos uplate (USDT)</label>'
-    +'<input class="fi" type="number" id="betAmt" placeholder="0.00" min="1" max="'+bal+'" step="0.01" oninput="window._prevWin('+tot+')">'
+    +'<input class="fi" type="number" id="betAmt" placeholder="0.00" min="0.5" max="'+bal+'" step="0.01" oninput="window._prevWin('+tot+')">'
     +'</div><div id="winPrev" style="text-align:center;font-size:13px;color:var(--text3);margin-bottom:13px"></div>'
     +'<button class="btn btn-accent btn-full" onclick="window._placeBet()">Postavi okladu</button>'
     +'<button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="window._clearSlip()">Očisti listić</button>';
@@ -1046,13 +1101,13 @@ function renderSlip() {
 function prevWin(tot) {
   const amt = parseFloat(document.getElementById('betAmt')?.value)||0;
   const el  = document.getElementById('winPrev');
-  el.innerHTML = amt>0 ? 'Potencijalna dobit: <strong style="color:var(--accent);font-family:var(--fMono)">₮ '+(amt*tot).toFixed(2)+'</strong>' : '';
+  el.innerHTML = amt>0 ? 'Potencijalna dobit: <strong style="color:var(--accent);font-family:var(--fMono)">'+fmt(amt*tot)+'</strong>' : '';
 }
 
 async function placeBet() {
   if (!currentUser) return;
   const amt = parseFloat(document.getElementById('betAmt').value);
-  if (!amt || amt<=0) return toast('Upiši iznos uplate', true);
+  if (!amt || amt < 0.5) return toast('Minimalni ulog je ₮ 0.50', true);
   if (amt > (currentUser.balance||0)) return toast('Nedovoljno sredstava', true);
   const tot = slip.reduce((a,b)=>a*b.odd,1);
   const bet = { id:Date.now(), items:JSON.parse(JSON.stringify(slip)), amount:amt, totalOdd:tot, potential:amt*tot, status:'pending', placed:new Date().toLocaleDateString('hr-HR') };
@@ -1070,16 +1125,25 @@ function wTab(n) {
   const bal  = currentUser?.balance||0;
 
   if (n===0) {
+    const isAdm = isAdmin();
     body.innerHTML =
       '<div class="bal-box">'
       +'<div class="bal-lbl">Dostupno stanje</div>'
-      +'<div class="bal-amt">₮ '+bal.toFixed(2)+'</div>'
-      +'<div class="bal-sub">USDT</div></div>'
+      +'<div class="bal-amt">'+fmt(bal)+'</div>'
+      +'<div class="bal-sub">'+(currencyMode==='EUR'?'EUR (1 USDT = '+eurRate.toFixed(4)+' EUR)':'USDT')+'</div></div>'
       +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">'
       +'<button class="btn btn-gold btn-full" onclick="window._wTab(1)">↑ Uplata</button>'
       +'<button class="btn btn-outline btn-full" onclick="window._wTab(2)">↓ Isplata</button>'
       +'</div>'
-      +'<button class="btn btn-ghost btn-full" style="margin-top:10px" onclick="window._wTab(3)">📋 Moje oklade</button>';
+      +'<button class="btn btn-ghost btn-full" style="margin-top:10px" onclick="window._wTab(3)">📋 Moje oklade</button>'
+      +(isAdm ? '<div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px">'
+        +'<div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🔧 Test alat</div>'
+        +'<div style="display:flex;gap:8px">'
+        +'<input class="fi" type="number" id="testAmt" placeholder="Iznos (USDT)" style="flex:1;padding:8px 12px;font-size:13px">'
+        +'<button class="btn btn-ghost" style="white-space:nowrap" onclick="window._addTestBalance()">+ Dodaj</button>'
+        +'</div>'
+        +'<div style="font-size:11px;color:var(--text3);margin-top:5px">Vidljivo samo adminu — za testiranje</div>'
+        +'</div>' : '');
 
   } else if (n===1) {
     const fee    = +(MIN_DEPOSIT * FEE_PCT / 100).toFixed(2);
@@ -1117,7 +1181,7 @@ function wTab(n) {
       +'⚠️ Isplaćeni iznos bit će umanjen za proviziju mjenjačnice*</div>'
       +'<div class="bal-box" style="margin-bottom:14px">'
       +'<div class="bal-lbl">Dostupno za isplatu</div>'
-      +'<div class="bal-amt" style="font-size:32px">₮ '+bal.toFixed(2)+'</div></div>'
+      +'<div class="bal-amt" style="font-size:32px">'+fmt(bal)+'</div></div>'
       +'<div class="fg"><label class="fl">Iznos isplate (USDT)</label>'
       +'<input class="fi" type="number" id="wdAmt" placeholder="0.00" min="'+MIN_WITHDRAW+'" max="'+bal+'" step="0.01" ></div>'
       +'<div id="feePreviewWd" style="text-align:center;font-size:13px;color:var(--text3);margin-bottom:12px"></div>'
@@ -1131,12 +1195,45 @@ function wTab(n) {
   } else {
     const bets = currentUser?.bets||[];
     if (!bets.length) { body.innerHTML='<div class="empty"><div class="ei">🎯</div><p>Još nemaš postavljenih oklada</p></div>'; return; }
+    const marketName = m => {
+      const map = {'1X2':'Ishod utakmice','DUPLA':'Dupla šansa','OU':'Više/Manje 2.5','GGNG':'Oba daju gol'};
+      return map[m] || m || 'Ishod utakmice';
+    };
+    const typeName = t => {
+      const map = {'1':'Domaćin (1)','X':'Neriješeno (X)','2':'Gost (2)','1X':'Dupla 1X','12':'Dupla 12','X2':'Dupla X2','VISE':'Više od 2.5','MANJE':'Manje od 2.5','GG':'Oba daju gol','NG':'Nitko ne daje'};
+      return map[t] || t;
+    };
     body.innerHTML = bets.map(b=>{
       const [cls,lbl] = b.status==='win'?['bs-w','✓ Dobitak']:b.status==='loss'?['bs-l','✗ Gubitak']:b.status==='storno'?['bs-p','↩ Storno']:['bs-p','U tijeku'];
-      const desc = b.items.map(i=>i.match+' ('+i.lbl+')').join(', ');
-      return '<div class="bet-row"><div><div class="bm">'+(desc.length>52?desc.slice(0,49)+'…':desc)+'</div>'
-        +'<div class="bp">₮ '+b.amount.toFixed(2)+' × '+b.totalOdd.toFixed(2)+' = ₮ '+b.potential.toFixed(2)+' · '+b.placed+'</div></div>'
-        +'<span class="bstatus '+cls+'">'+lbl+'</span></div>';
+      const isWin = b.status==='win', isLoss=b.status==='loss';
+      const itemsHtml = b.items.map(i=>
+        '<div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)">'
+        +'<div style="font-size:14px;font-weight:700;color:var(--text)">'+i.match+'</div>'
+        +'<div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-top:2px">'+marketName(i.market)+'</div>'
+        +'<div style="font-size:13px;color:var(--text2);margin-top:3px">Tip: <strong style="color:var(--text)">'+typeName(i.type)+'</strong>'
+        +(i.settled ? (i.win ? ' <span style="color:var(--accent)">✓</span>' : ' <span style="color:var(--red)">✗</span>') : '')
+        +'</div>'
+        +'</div>'
+      ).join('');
+      return '<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px">'
+        +itemsHtml
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px">'
+        +'<div style="font-size:12px;color:var(--text3)">Ulog</div>'
+        +'<div style="font-size:12px;color:var(--text3)">Kvota</div>'
+        +'<div style="font-size:15px;font-weight:700;color:var(--text);font-family:var(--fMono)">'+fmt(b.amount)+'</div>'
+        +'<div style="font-size:15px;font-weight:700;color:var(--text);font-family:var(--fMono)">'+b.totalOdd.toFixed(2)+'</div>'
+        +'</div>'
+        +'<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">'
+        +'<div>'
+        +'<div style="font-size:11px;color:var(--text3)">Moguća dobit</div>'
+        +'<div style="font-size:17px;font-weight:700;font-family:var(--fMono);color:'+(isWin?'var(--accent)':isLoss?'var(--red)':'var(--text)')+'">'+fmt(b.potential)+'</div>'
+        +'</div>'
+        +'<div style="text-align:right">'
+        +'<span class="bstatus '+cls+'">'+lbl+'</span>'
+        +'<div style="font-size:11px;color:var(--text3);margin-top:4px">'+b.placed+'</div>'
+        +'</div>'
+        +'</div>'
+        +'</div>';
     }).join('');
   }
 }
@@ -1323,6 +1420,15 @@ function toast(msg, err=false) {
   _tt = setTimeout(()=>{ el.className='toast'; }, 3600);
 }
 
+async function addTestBalance() {
+  const amt = parseFloat(document.getElementById('testAmt')?.value);
+  if (!amt || amt <= 0) return toast('Upiši iznos', true);
+  await saveUser({ balance: (currentUser.balance||0) + amt });
+  updateNav();
+  wTab(0);
+  toast('Dodano ₮ '+amt.toFixed(2)+' (test) ✓');
+}
+
 function toggleExtra(matchId, btn) {
   const el = document.getElementById('extra_'+matchId);
   if (!el) return;
@@ -1332,6 +1438,15 @@ function toggleExtra(matchId, btn) {
 }
 
 // ── Global window bridges ─────────────────────────────────────────────────────
+window._toggleCurrency     = () => toggleCurrency();
+
+window._ctaClick           = () => {
+  if (currentUser) {
+    document.querySelector('.section')?.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    openM('mReg');
+  }
+};
 window._openLogin          = () => openM('mLogin');
 window._openReg            = () => openM('mReg');
 window._openWallet         = () => openWallet();
@@ -1355,7 +1470,8 @@ window._adminAdd           = () => adminAdd();
 window._calcFeeDeposit     = () => calcFeeDeposit();
 window._calcFeeWithdraw    = () => calcFeeWithdraw();
 window.doLogin    = doLogin;
-window._toggleExtra = (id, btn) => toggleExtra(id, btn);
+window._toggleExtra      = (id, btn) => toggleExtra(id, btn);
+window._addTestBalance   = () => addTestBalance();
 window.doRegister = doRegister;
 window.openM      = openM;
 window.closeM     = closeM;
@@ -1364,8 +1480,10 @@ window.wTab       = wTab;
 window.adminTab   = adminTab;
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+fetchEurRate();
+setInterval(fetchEurRate, 5 * 60 * 1000); // refresh every 5 min
 loadMatches();
-setInterval(loadMatches, 60000);
+setInterval(loadMatches, 5 * 60 * 1000); // 5 minuta
 </script>
 </body>
 </html>
