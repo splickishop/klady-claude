@@ -327,6 +327,17 @@
     .matches-grid{grid-template-columns:1fr;}
     .trust-row{flex-direction:column;align-items:center;}
   }
+  /* Result block */
+  .result-block{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:12px;}
+  .rg{font-family:var(--fDisplay);font-size:32px;letter-spacing:1px;color:var(--text3);min-width:32px;text-align:center;line-height:1;}
+  .rg-win{color:var(--accent);}
+  .rg-sep{font-family:var(--fMono);font-size:20px;color:var(--text3);margin:0 2px;}
+  .team-win .team-name{color:var(--accent);font-weight:700;}
+  .mcard-done{opacity:.85;}
+  .mcard-done:hover{opacity:1;}
+  .odd-win{border-color:var(--accent2)!important;background:rgba(0,229,160,.12)!important;}
+  .odd-win .odd-val{color:var(--accent)!important;}
+
   ::-webkit-scrollbar{width:5px;}
   ::-webkit-scrollbar-track{background:var(--bg2);}
   ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
@@ -728,42 +739,66 @@ function renderMatches() {
     wrap.innerHTML = '<div class="empty"><div class="ei">⚽</div><p>Nema utakmica za odabrani filter</p></div>';
     return;
   }
-  wrap.innerHTML = '<div class="matches-grid">' + list.map(cardHTML).join('') + '</div>';
+  // Predstojeće prve, završene na kraju
+  const upcoming = list.filter(m => !m.rezultat);
+  const done     = list.filter(m =>  m.rezultat);
+  const sorted   = [...upcoming, ...done];
+  wrap.innerHTML = '<div class="matches-grid">' + sorted.map(cardHTML).join('') + '</div>';
+  // Automatski ažuriraj oklade korisnika na temelju rezultata
+  if (window.currentUser) settleUserBets();
 }
 
 function cardHTML(m) {
   const done = !!m.rezultat;
   const inSlip = slip.find(b => b.mid === m.id);
   const tag = done ? '<span class="tag tag-done">Završena</span>' : '<span class="tag tag-up">Predstojeća</span>';
-  const res = done ? `<div class="result-pill">${m.rezultat}</div>` : '';
+
+  // Rezultat s istaknutim pobjednikom
+  let res = '';
+  if (done) {
+    const parts = m.rezultat.split(':');
+    const g1 = parseInt(parts[0]), g2 = parseInt(parts[1]);
+    const domW = g1 > g2, gostW = g2 > g1;
+    res = '<div class="result-block">'
+      + '<span class="rg ' + (domW?'rg-win':'') + '">' + (isNaN(g1)?'?':g1) + '</span>'
+      + '<span class="rg-sep">:</span>'
+      + '<span class="rg ' + (gostW?'rg-win':'') + '">' + (isNaN(g2)?'?':g2) + '</span>'
+      + '</div>';
+  }
+
   const oddBtn = (lbl, val, type) => {
-    if (!val) return `<div class="odd off"><div class="odd-lbl">${lbl}</div><div class="odd-val">—</div></div>`;
-    const sel = inSlip && inSlip.type === type ? 'sel' : '';
-    const off = done ? 'off' : '';
-    // escape single quotes in match id just in case
+    if (!val) return '<div class="odd off"><div class="odd-lbl">'+lbl+'</div><div class="odd-val">—</div></div>';
+    let cls = 'odd';
+    if (done) {
+      // Označi pobjednički ishod zeleno, ostale sivo
+      cls += m.ishod === type ? ' odd-win' : ' off';
+    } else {
+      if (inSlip && inSlip.type === type) cls += ' sel';
+    }
     const safeId = m.id.replace(/'/g,"&#39;");
-    return `<div class="odd ${sel} ${off}" onclick="${done ? '' : `pickOdd('${safeId}','${type}','${lbl}',${val})`}">
-      <div class="odd-lbl">${lbl}</div><div class="odd-val">${val.toFixed(2)}</div>
-    </div>`;
+    const click = done ? '' : 'pickOdd('' + safeId + '','' + type + '','' + lbl + '',' + val + ')';
+    return '<div class="' + cls + '" onclick="' + click + '">'
+      + '<div class="odd-lbl">' + lbl + '</div>'
+      + '<div class="odd-val">' + val.toFixed(2) + '</div>'
+      + '</div>';
   };
-  // natjecanje badge
-  const nat = m.natjecanje ? `<span style="font-size:10px;color:var(--text3);font-style:italic">${m.natjecanje}</span>` : '';
-  return `
-    <div class="mcard ${inSlip ? 'has-bet' : ''}" id="card_${m.id}">
-      <div class="mcard-head">
-        <span style="font-size:11px;color:var(--text2);font-family:var(--fMono)">${m.datum}</span>
-        <div style="display:flex;align-items:center;gap:6px">${nat}${tag}</div>
-      </div>
-      <div class="mcard-body">
-        <div class="teams">
-          <div class="team"><div class="team-name">${m.dom}</div></div>
-          <div class="vs">VS</div>
-          <div class="team"><div class="team-name">${m.gost||'—'}</div></div>
-        </div>
-        ${res}
-        <div class="odds">${oddBtn('1',m.kvota1,'1')}${oddBtn('X',m.kvotaX,'X')}${oddBtn('2',m.kvota2,'2')}</div>
-      </div>
-    </div>`;
+
+  const nat = m.natjecanje ? '<span style="font-size:10px;color:var(--text3);font-style:italic">' + m.natjecanje + '</span>' : '';
+  return '<div class="mcard ' + (inSlip ? 'has-bet' : '') + (done ? ' mcard-done' : '') + '" id="card_' + m.id + '">'
+    + '<div class="mcard-head">'
+    + '<span style="font-size:11px;color:var(--text2);font-family:var(--fMono)">' + m.datum + '</span>'
+    + '<div style="display:flex;align-items:center;gap:6px">' + nat + tag + '</div>'
+    + '</div>'
+    + '<div class="mcard-body">'
+    + '<div class="teams">'
+    + '<div class="team' + (done && m.ishod==='1' ? ' team-win' : '') + '"><div class="team-name">' + m.dom + '</div></div>'
+    + '<div class="vs">' + (done ? '' : 'VS') + '</div>'
+    + '<div class="team' + (done && m.ishod==='2' ? ' team-win' : '') + '"><div class="team-name">' + (m.gost||'—') + '</div></div>'
+    + '</div>'
+    + res
+    + '<div class="odds">' + oddBtn('1',m.kvota1,'1') + oddBtn('X',m.kvotaX,'X') + oddBtn('2',m.kvota2,'2') + '</div>'
+    + '</div>'
+    + '</div>';
 }
 
 function pickOdd(mid, type, lbl, odd) {
@@ -860,6 +895,81 @@ async function placeBet() {
   closeM('mSlip');
   renderMatches();
   toast(`Oklada postavljena! Moguća dobit: ₮ ${bet.potential.toFixed(2)} ✓`);
+}
+
+// =====================================================
+// SETTLEMENT — automatsko ažuriranje oklada
+// =====================================================
+async function settleUserBets() {
+  const u = window.currentUser;
+  if (!u || !u.bets || !u.bets.length) return;
+
+  // Napravi mapu rezultata: matchId → ishod ('1','X','2')
+  const resultMap = {};
+  allMatches.forEach(m => {
+    if (m.ishod) resultMap[m.id] = m.ishod;
+  });
+
+  let changed = false;
+  let balanceDelta = 0;
+
+  const updatedBets = u.bets.map(bet => {
+    if (bet.status !== 'pending') return bet; // već završena
+
+    // Provjeri sve oklade u listiću
+    let allSettled = true;
+    let anyLoss = false;
+    let anyStorno = false;
+
+    const updatedItems = bet.items.map(item => {
+      const ishod = resultMap[item.mid];
+      if (!ishod) {
+        allSettled = false; // još nema rezultata
+        return item;
+      }
+      // Ima rezultat
+      const win = ishod === item.type;
+      return { ...item, settled: true, win };
+    });
+
+    if (!allSettled) return { ...bet, items: updatedItems }; // čekaj sve rezultate
+
+    // Sve utakmice imaju rezultat — odredi status
+    const allWin = updatedItems.every(i => i.win);
+    anyLoss = updatedItems.some(i => !i.win);
+
+    let newStatus, payout = 0;
+    if (allWin) {
+      newStatus = 'win';
+      payout = bet.potential;
+      balanceDelta += payout;
+    } else if (anyLoss) {
+      newStatus = 'loss';
+      payout = 0;
+    } else {
+      newStatus = 'storno';
+      payout = bet.amount; // vrati ulog
+      balanceDelta += payout;
+    }
+
+    changed = true;
+    return { ...bet, items: updatedItems, status: newStatus, payout, settled: new Date().toLocaleDateString('hr-HR') };
+  });
+
+  if (changed) {
+    const newBal = (u.balance || 0) + balanceDelta;
+    await saveUser({ balance: newBal, bets: updatedBets });
+    updateNav();
+
+    // Obavijesti korisnika
+    const wins   = updatedBets.filter(b => b.status === 'win'    && u.bets.find(ob => ob.id === b.id && ob.status === 'pending'));
+    const losses = updatedBets.filter(b => b.status === 'loss'   && u.bets.find(ob => ob.id === b.id && ob.status === 'pending'));
+    const stornos= updatedBets.filter(b => b.status === 'storno' && u.bets.find(ob => ob.id === b.id && ob.status === 'pending'));
+
+    if (wins.length)    toast('🎉 Dobitna oklada! +₮ ' + wins.reduce((a,b)=>a+b.payout,0).toFixed(2));
+    else if (losses.length) toast('Oklada završena — gubitak.', true);
+    else if (stornos.length) toast('Oklada stornirana — ulog vraćen.');
+  }
 }
 
 // =====================================================
