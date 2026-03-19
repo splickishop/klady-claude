@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CryptoKlad — Kripto Sportska Kladionica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:     #07090d;
@@ -25,7 +25,7 @@
     --text2:  #7a96b0;
     --text3:  #3d5468;
     --fDisplay: 'Bebas Neue', sans-serif;
-    --fBody:    'DM Sans', sans-serif;
+    --fBody:    'Outfit', sans-serif;
     --fMono:    'Space Mono', monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -139,9 +139,13 @@
 
   .mcard-body{padding:14px;}
   .teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-  .team{text-align:center;flex:1;}
-  .team-name{font-size:14px;font-weight:600;}
-  .vs{width:32px;text-align:center;font-family:var(--fMono);font-size:10px;color:var(--text3);flex-shrink:0;}
+  .team{text-align:center;flex:1;padding:0 4px;}
+  .team-name{font-size:16px;font-weight:700;letter-spacing:-.2px;line-height:1.2;}
+  .vs{
+    width:36px;flex-shrink:0;text-align:center;
+    font-family:var(--fMono);font-size:10px;font-weight:700;
+    color:var(--text3);letter-spacing:1px;
+  }
 
   .result-pill{
     display:block;text-align:center;margin-bottom:12px;
@@ -342,6 +346,17 @@
   .market-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;font-weight:600;}
   .odds-2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
   .odds-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+  .extra-markets{display:none;}
+  .extra-markets.open{display:block;}
+  .more-btn{
+    width:100%;margin-top:8px;padding:7px;
+    background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+    color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;
+    font-family:var(--fBody);transition:all .15s;letter-spacing:.5px;
+    text-transform:uppercase;
+  }
+  .more-btn:hover{border-color:var(--accent2);color:var(--accent);}
+  .more-btn.open{border-color:var(--border2);color:var(--text2);}
 
   ::-webkit-scrollbar{width:5px;}
   ::-webkit-scrollbar-track{background:var(--bg2);}
@@ -861,34 +876,35 @@ function cardHTML(m) {
       +'<div class="odd-lbl">'+lbl+'</div><div class="odd-val">'+val.toFixed(2)+'</div></div>';
   };
 
-  // Build market rows — only show markets with at least one valid odd
-  let markets = '';
+  // Build market rows
+  let mainMarket = '', extraMarkets = '';
 
   const has1X2   = m.kvota1 || m.kvotaX || m.kvota2;
   const hasDupla = m.kvota1X || m.kvota12 || m.kvotaX2;
   const hasOU    = m.kvotaVise || m.kvotaManje;
   const hasGGNG  = m.kvotaGG || m.kvotaNG;
+  const hasExtra = hasDupla || hasOU || hasGGNG;
 
   if (has1X2) {
-    markets += '<div class="market-row">'
+    mainMarket = '<div class="market-row">'
       +'<div class="market-lbl">Ishod utakmice</div>'
       +'<div class="odds odds-3">'
-      +oddBtn('1',   m.kvota1,  '1',      '1X2')
-      +oddBtn('X',   m.kvotaX,  'X',      '1X2')
-      +oddBtn('2',   m.kvota2,  '2',      '1X2')
+      +oddBtn('1', m.kvota1, '1', '1X2')
+      +oddBtn('X', m.kvotaX, 'X', '1X2')
+      +oddBtn('2', m.kvota2, '2', '1X2')
       +'</div></div>';
   }
   if (hasDupla) {
-    markets += '<div class="market-row">'
+    extraMarkets += '<div class="market-row">'
       +'<div class="market-lbl">Dupla šansa</div>'
       +'<div class="odds odds-3">'
-      +oddBtn('1X',  m.kvota1X, '1X',  'DUPLA')
-      +oddBtn('12',  m.kvota12, '12',  'DUPLA')
-      +oddBtn('X2',  m.kvotaX2, 'X2',  'DUPLA')
+      +oddBtn('1X', m.kvota1X, '1X', 'DUPLA')
+      +oddBtn('12', m.kvota12, '12', 'DUPLA')
+      +oddBtn('X2', m.kvotaX2, 'X2', 'DUPLA')
       +'</div></div>';
   }
   if (hasOU) {
-    markets += '<div class="market-row">'
+    extraMarkets += '<div class="market-row">'
       +'<div class="market-lbl">Više/Manje 2.5</div>'
       +'<div class="odds odds-2">'
       +oddBtn('Više',  m.kvotaVise,  'VISE',  'OU')
@@ -896,13 +912,18 @@ function cardHTML(m) {
       +'</div></div>';
   }
   if (hasGGNG) {
-    markets += '<div class="market-row">'
+    extraMarkets += '<div class="market-row">'
       +'<div class="market-lbl">Oba daju gol</div>'
       +'<div class="odds odds-2">'
       +oddBtn('GG', m.kvotaGG, 'GG', 'GGNG')
       +oddBtn('NG', m.kvotaNG, 'NG', 'GGNG')
       +'</div></div>';
   }
+  const extraBlock = hasExtra && !done
+    ? '<div class="extra-markets" id="extra_'+m.id+'">'+extraMarkets+'</div>'
+      +'<button class="more-btn" onclick="window._toggleExtra(''+m.id+'',this)">+ Više opcija klađenja</button>'
+    : (done ? extraMarkets : '');
+  const markets = mainMarket + extraBlock;
 
   const domWin  = done && !storno && m.ishod === '1';
   const gostWin = done && !storno && m.ishod === '2';
@@ -1302,6 +1323,14 @@ function toast(msg, err=false) {
   _tt = setTimeout(()=>{ el.className='toast'; }, 3600);
 }
 
+function toggleExtra(matchId, btn) {
+  const el = document.getElementById('extra_'+matchId);
+  if (!el) return;
+  const isOpen = el.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.textContent = isOpen ? '− Sakrij opcije' : '+ Više opcija klađenja';
+}
+
 // ── Global window bridges ─────────────────────────────────────────────────────
 window._openLogin          = () => openM('mLogin');
 window._openReg            = () => openM('mReg');
@@ -1326,6 +1355,7 @@ window._adminAdd           = () => adminAdd();
 window._calcFeeDeposit     = () => calcFeeDeposit();
 window._calcFeeWithdraw    = () => calcFeeWithdraw();
 window.doLogin    = doLogin;
+window._toggleExtra = (id, btn) => toggleExtra(id, btn);
 window.doRegister = doRegister;
 window.openM      = openM;
 window.closeM     = closeM;
