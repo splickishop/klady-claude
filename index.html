@@ -604,29 +604,40 @@ function updateNav() {
 // =====================================================
 // MATCHES
 // =====================================================
+// Razdvoji utakmicu na dom/gost — podrzava i " - " i " – " (en-dash)
+function splitTimovi(utakmica) {
+  if (!utakmica) return ['', ''];
+  const normalized = utakmica.replace(/\s[\u2013\u2014]\s/g, ' - ').replace(/[\u2013\u2014]/g, ' - ');
+  const idx = normalized.indexOf(' - ');
+  if (idx === -1) return [utakmica.trim(), ''];
+  return [normalized.slice(0, idx).trim(), normalized.slice(idx + 3).trim()];
+}
+
 async function loadMatches() {
   const btn = document.getElementById('refBtn');
   btn.classList.add('spin');
   document.getElementById('matchesWrap').innerHTML = '<div class="loading"><div class="spinner"></div>Učitavanje...</div>';
   try {
-    // CORS fix: Google Apps Script doGet mora imati callback param za JSONP
-    // OR: koristimo no-cors mode za dohvat — ali tada trebamo koristiti proxy
-    // Najjednostavniji fix: dodaj ?callback= u Apps Script i koristi JSONP
     const res = await fetch(SHEETS_URL + '?t=' + Date.now());
     const data = await res.json();
-    allMatches = data.matches || [];
+    allMatches = (data.matches || []).map(m => {
+      // Popravi dom/gost ako sadrze cijelu utakmicu (en-dash problem)
+      if (!m.gost || m.dom === m.utakmica) {
+        const [dom, gost] = splitTimovi(m.utakmica);
+        return { ...m, dom, gost };
+      }
+      return m;
+    });
     renderMatches();
     toast(`Učitano ${allMatches.length} utakmica ✓`);
   } catch(e) {
     document.getElementById('matchesWrap').innerHTML = `
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;">
         <div style="font-size:32px;margin-bottom:12px">⚠️</div>
-        <div style="font-weight:700;margin-bottom:8px">CORS greška</div>
+        <div style="font-weight:700;margin-bottom:8px">Greška pri učitavanju</div>
         <div style="font-size:13px;color:var(--text2);max-width:380px;margin:0 auto;line-height:1.6">
-          Google Apps Script blokira direktne pozive dok app nije na <strong>https://</strong> domeni.<br><br>
-          <strong>Rješenje:</strong> Stavi <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">index.html</code> na 
-          <a href="https://pages.github.com" target="_blank" style="color:var(--accent)">GitHub Pages</a> ili 
-          <a href="https://netlify.com" target="_blank" style="color:var(--accent)">Netlify</a> — tada sve radi.
+          ${e.message}<br><br>
+          Provjeri je li stranica na <strong>https://</strong> domeni (GitHub Pages/Netlify).
         </div>
         <button class="btn btn-outline" style="margin-top:18px" onclick="loadMatches()">↻ Pokušaj ponovo</button>
       </div>`;
