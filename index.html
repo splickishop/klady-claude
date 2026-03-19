@@ -369,7 +369,15 @@
     <div><strong>100% Sigurno</strong><p>Klađenje je potpuno sigurno. Svi igrači su zaštićeni i nitko im ne može pristupiti.</p></div>
   </div>
   <div class="trust-card">
-    <span class="ico">🥷</span>
+    <span class="ico">
+      <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 4C18 4 8 15 8 28V56L16 50L24 56L32 50L40 56L48 50L56 56V28C56 15 46 4 32 4Z" fill="#00e5a0" opacity="0.15" stroke="#00e5a0" stroke-width="2.5"/>
+        <circle cx="24" cy="28" r="4" fill="#00e5a0"/>
+        <circle cx="40" cy="28" r="4" fill="#00e5a0"/>
+        <circle cx="22" cy="27" r="1.5" fill="#07090d"/>
+        <circle cx="38" cy="27" r="1.5" fill="#07090d"/>
+      </svg>
+    </span>
     <div><strong>Potpuna anonimnost</strong><p>Sve oklade i svi igrači su potpuno anonimni. Bez veza s identitetom.</p></div>
   </div>
   <div class="trust-card">
@@ -384,10 +392,15 @@
     <div class="sec-title">Dostupne utakmice</div>
     <button class="refresh-btn" id="refBtn" onclick="loadMatches()" title="Osvježi">↻</button>
   </div>
-  <div class="ftabs">
-    <button class="ftab active" onclick="filterM('all',this)">Sve</button>
-    <button class="ftab" onclick="filterM('up',this)">Predstojeće</button>
-    <button class="ftab" onclick="filterM('done',this)">Završene</button>
+  <!-- Date tabs — auto-generated from sheets -->
+  <div class="ftabs" id="dateTabs">
+    <button class="ftab active" onclick="filterDate('all',this)">Sve</button>
+  </div>
+  <!-- Status filter -->
+  <div class="ftabs" id="statusTabs" style="margin-top:-8px;margin-bottom:18px">
+    <button class="ftab active" onclick="filterStatus('all',this)">Sve</button>
+    <button class="ftab" onclick="filterStatus('up',this)">Predstojeće</button>
+    <button class="ftab" onclick="filterStatus('done',this)">Završene</button>
   </div>
   <div id="matchesWrap">
     <div class="loading"><div class="spinner"></div>Učitavanje...</div>
@@ -629,6 +642,7 @@ async function loadMatches() {
       return m;
     });
     renderMatches();
+    buildDateTabs();
     toast(`Učitano ${allMatches.length} utakmica ✓`);
   } catch(e) {
     document.getElementById('matchesWrap').innerHTML = `
@@ -646,23 +660,59 @@ async function loadMatches() {
   }
 }
 
-function filterM(f, el) {
-  curFilter = f;
-  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+let curDate = 'all', curStatus = 'all';
+
+function filterDate(date, el) {
+  curDate = date;
+  document.querySelectorAll('#dateTabs .ftab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   renderMatches();
+}
+
+function filterStatus(status, el) {
+  curStatus = status;
+  document.querySelectorAll('#statusTabs .ftab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderMatches();
+}
+
+// Keep old filterM for backward compat (not used from HTML anymore)
+function filterM(f, el) { filterStatus(f, el); }
+
+function buildDateTabs() {
+  // Extract unique sheet dates from match IDs (format: "18.3._2" → "18.3.")
+  const dates = [];
+  allMatches.forEach(m => {
+    // sheet name is encoded in id before the underscore+number, e.g. "18.3._2"
+    const sheetName = m.id.replace(/_\d+$/, '');
+    if (!dates.includes(sheetName)) dates.push(sheetName);
+  });
+  const container = document.getElementById('dateTabs');
+  const activeDate = curDate;
+  container.innerHTML = '<button class="ftab' + (activeDate==='all'?' active':'') + '" onclick="filterDate('all',this)">Sve</button>';
+  dates.forEach(d => {
+    const active = activeDate === d ? ' active' : '';
+    container.innerHTML += '<button class="ftab' + active + '" onclick="filterDate(''+d+'',this)">'+d+'</button>';
+  });
 }
 
 function renderMatches() {
   const wrap = document.getElementById('matchesWrap');
   let list = allMatches;
-  if (curFilter === 'up')   list = allMatches.filter(m => !m.rezultat);
-  if (curFilter === 'done') list = allMatches.filter(m =>  m.rezultat);
+
+  // Filter by date/sheet
+  if (curDate !== 'all') {
+    list = list.filter(m => m.id.startsWith(curDate));
+  }
+  // Filter by status
+  if (curStatus === 'up')   list = list.filter(m => !m.rezultat);
+  if (curStatus === 'done') list = list.filter(m =>  m.rezultat);
+
   if (!list.length) {
     wrap.innerHTML = '<div class="empty"><div class="ei">⚽</div><p>Nema utakmica za odabrani filter</p></div>';
     return;
   }
-  wrap.innerHTML = `<div class="matches-grid">${list.map(cardHTML).join('')}</div>`;
+  wrap.innerHTML = '<div class="matches-grid">' + list.map(cardHTML).join('') + '</div>';
 }
 
 function cardHTML(m) {
