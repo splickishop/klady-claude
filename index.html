@@ -715,13 +715,32 @@ let currencyMode = localStorage.getItem('ck_currency') || 'USDT'; // 'USDT' | 'E
 let eurRate = 0.92; // fallback
 
 async function fetchEurRate() {
-  try {
-    const r = await fetch('https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd/eur.json');
-    const d = await r.json();
-    if (d.eur) { eurRate = d.eur; console.log('EUR rate:', eurRate); }
-  } catch(e) {
-    console.warn('EUR rate fetch failed, using fallback:', eurRate);
+  // Try multiple free APIs in sequence
+  const apis = [
+    // API 1: exchangerate-api (no key needed for basic)
+    async () => {
+      const r = await fetch('https://open.er-api.com/v6/latest/USD');
+      const d = await r.json();
+      if (d.rates?.EUR) return d.rates.EUR;
+    },
+    // API 2: frankfurter.app (ECB data, free)
+    async () => {
+      const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR');
+      const d = await r.json();
+      if (d.rates?.EUR) return d.rates.EUR;
+    },
+  ];
+  for (const api of apis) {
+    try {
+      const rate = await api();
+      if (rate && rate > 0) {
+        eurRate = rate;
+        console.log('EUR/USD rate:', eurRate);
+        return;
+      }
+    } catch(e) {}
   }
+  console.warn('All EUR rate APIs failed, using fallback:', eurRate);
 }
 
 function fmt(usdt) {
