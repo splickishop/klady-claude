@@ -1300,23 +1300,27 @@ function renderSlip() {
     +'<div class="str"><span>Ukupna kvota</span><span style="color:var(--accent);font-family:var(--fMono)">'+tot.toFixed(2)+'</span></div>'
     +'<div class="str big"><span>Stanje računa</span><span class="v">'+fmt(bal)+'</span></div>'
     +'</div>'
-    +'<div class="fg" style="margin-top:15px"><label class="fl">Iznos uplate (USDT)</label>'
-    +'<input class="fi" type="number" id="betAmt" placeholder="0.00" min="0.5" max="'+bal+'" step="0.01" oninput="window._prevWin('+tot+')">'
+    +'<div class="fg" style="margin-top:15px"><label class="fl">Iznos uplate ('+currSymbol()+')</label>'
+    +'<input class="fi" type="number" id="betAmt" placeholder="0.00" min="'+toDisplay(0.5).toFixed(2)+'" max="'+toDisplay(bal).toFixed(2)+'" step="0.01" oninput="window._prevWin('+tot+')">'
     +'</div><div id="winPrev" style="text-align:center;font-size:13px;color:var(--text3);margin-bottom:13px"></div>'
     +'<button class="btn btn-accent btn-full" onclick="window._placeBet()">Postavi okladu</button>'
     +'<button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="window._clearSlip()">Očisti listić</button>';
 }
 
 function prevWin(tot) {
-  const amt = parseFloat(document.getElementById('betAmt')?.value)||0;
-  const el  = document.getElementById('winPrev');
-  el.innerHTML = amt>0 ? 'Potencijalna dobit: <strong style="color:var(--accent);font-family:var(--fMono)">'+fmt(amt*tot)+'</strong>' : '';
+  const amtDisplay = parseFloat(document.getElementById('betAmt')?.value)||0;
+  const amtUsdt = toUsdt(amtDisplay); // konvertiraj u USDT za izračun
+  const el = document.getElementById('winPrev');
+  el.innerHTML = amtDisplay > 0
+    ? 'Potencijalna dobit: <strong style="color:var(--accent);font-family:var(--fMono)">'+fmt(amtUsdt*tot)+'</strong>'
+    : '';
 }
 
 async function placeBet() {
   if (!currentUser) return;
-  const amt = parseFloat(document.getElementById('betAmt').value);
-  if (!amt || amt < 0.5) return toast('Minimalni ulog je ₮ 0.50', true);
+  const amtDisplay = parseFloat(document.getElementById('betAmt').value);
+  const amt = toUsdt(amtDisplay); // uvijek pohrani u USDT
+  if (!amt || amt < 0.5) return toast('Minimalni ulog je ' + fmt(toDisplay(0.5)) , true);
   if (amt > (currentUser.balance||0)) return toast('Nedovoljno sredstava', true);
   const tot = slip.reduce((a,b)=>a*b.odd,1);
   const bet = { id:Date.now(), items:JSON.parse(JSON.stringify(slip)), amount:amt, totalOdd:tot, potential:amt*tot, status:'pending', placed:new Date().toLocaleDateString('hr-HR') };
