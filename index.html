@@ -1239,18 +1239,16 @@ async function trySettle() {
 async function settleUserBets() {
   if (!currentUser?.bets?.length) return;
   const resultMap = {};
-  // Use ALL matches including past ones
   allMatches.forEach(m => { 
-    if (m.ishod) {
-      resultMap[m.id] = m.ishod;
-    }
+    if (m.ishod) resultMap[m.id] = m.ishod;
   });
-  // Debug: log pending bets and available results
   const pending = currentUser.bets.filter(b => b.status === 'pending');
-  if (pending.length > 0) {
-    console.log('Pending bets:', pending.map(b => b.items.map(i => i.mid)));
-    console.log('Available results:', Object.keys(resultMap));
-  }
+  console.log('=== SETTLEMENT DEBUG ===');
+  console.log('Pending bets:', pending.map(b => b.items.map(i => i.mid)));
+  console.log('ResultMap:', resultMap);
+  console.log('allMatches count:', allMatches.length);
+  // Log each match id and ishod
+  allMatches.forEach(m => console.log('Match:', m.id, '| ishod:', m.ishod, '| rezultat:', m.rezultat));
   let changed = false, balDelta = 0;
   const updatedBets = currentUser.bets.map(bet => {
     if (bet.status !== 'pending') return bet;
