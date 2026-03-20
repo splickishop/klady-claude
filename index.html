@@ -1297,8 +1297,8 @@ function cardHTML(m) {
     extraMarkets += '<div class="market-row">'
       +'<div class="market-lbl">Oba daju gol</div>'
       +'<div class="odds odds-2">'
-      +oddBtn('GG', m.kvotaGG, 'GG', 'GGNG')
-      +oddBtn('NG', m.kvotaNG, 'NG', 'GGNG')
+      +oddBtn('Da', m.kvotaGG, 'GG', 'GGNG')
+      +oddBtn('Ne', m.kvotaNG, 'NG', 'GGNG')
       +'</div></div>';
   }
   const extraBlock = hasExtra && !done
@@ -1327,14 +1327,13 @@ function pickOdd(mid, type, lbl, odd, market) {
   if (!currentUser) { toast('Prijavi se za klađenje', true); openM('mLogin'); return; }
   const match = allMatches.find(m => m.id === mid);
   if (!match) return;
-  // One pick per match total — can't have two picks from same match
+  // One pick per match — clicking different type replaces existing
   const sameMatchIdx = slip.findIndex(b => b.mid === mid);
   if (sameMatchIdx >= 0) {
     if (slip[sameMatchIdx].type === type && slip[sameMatchIdx].market === market) {
       slip.splice(sameMatchIdx, 1); // deselect same pick
     } else {
-      toast('Već imaš odabir za ovu utakmicu', true);
-      return;
+      slip[sameMatchIdx] = { mid, match: match.utakmica, liga: match.natjecanje||'', datum: match.datum||'', type, lbl, odd, market };
     }
   } else {
     slip.push({ mid, match: match.utakmica, liga: match.natjecanje||'', datum: match.datum||'', type, lbl, odd, market });
@@ -1554,7 +1553,7 @@ function wTab(n) {
       return map[m] || m || 'Ishod utakmice';
     };
     const typeName = t => {
-      const map = {'1':'Domaćin (1)','X':'Neriješeno (X)','2':'Gost (2)','1X':'Dupla 1X','12':'Dupla 12','X2':'Dupla X2','VISE':'Više od 2.5','MANJE':'Manje od 2.5','GG':'Oba daju gol','NG':'Nitko ne daje'};
+      const map = {'1':'Domaćin (1)','X':'Neriješeno (X)','2':'Gost (2)','1X':'Dupla 1X','12':'Dupla 12','X2':'Dupla X2','VISE':'Više od 2.5','MANJE':'Manje od 2.5','GG':'Da (oba daju gol)','NG':'Ne (nitko ne daje)'};
       return map[t] || t;
     };
     body.innerHTML = bets.map(b=>{
