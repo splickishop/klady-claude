@@ -793,6 +793,11 @@ onAuthStateChanged(_auth, async (fbUser) => {
   }
   updateNav();
   updateFab();
+  // Run settlement after auth ready
+  if (currentUser && allMatches.length > 0) {
+    console.log('Auth ready, running settlement. Pending:', currentUser.bets?.filter(b=>b.status==='pending').length);
+    await settleUserBets();
+  }
 });
 
 // ── Auth helpers ──────────────────────────────────────────────────────────────
@@ -1042,6 +1047,8 @@ async function loadMatches() {
     buildDateTabs();
     renderMatches();
     toast('Učitano ' + allMatches.length + ' utakmica ✓');
+    // Settle bets after every load (catches past-date results)
+    if (currentUser) await settleUserBets();
   } catch(e) {
     console.error(e);
     document.getElementById('matchesWrap').innerHTML =
@@ -1064,7 +1071,7 @@ function renderMatches() {
   const upcoming = list.filter(m => !m.rezultat);
   const done     = list.filter(m =>  m.rezultat);
   wrap.innerHTML = '<div class="matches-grid">' + [...upcoming,...done].map(cardHTML).join('') + '</div>';
-  if (currentUser) settleUserBets();
+  // Settlement runs via onAuthStateChanged and loadMatches
 }
 
 // Determine winning outcome for each market
@@ -1224,7 +1231,18 @@ function pickOdd(mid, type, lbl, odd, market) {
 async function settleUserBets() {
   if (!currentUser?.bets?.length) return;
   const resultMap = {};
-  allMatches.forEach(m => { if (m.ishod) resultMap[m.id] = m.ishod; });
+  // Use ALL matches including past ones
+  allMatches.forEach(m => { 
+    if (m.ishod) {
+      resultMap[m.id] = m.ishod;
+    }
+  });
+  // Debug: log pending bets and available results
+  const pending = currentUser.bets.filter(b => b.status === 'pending');
+  if (pending.length > 0) {
+    console.log('Pending bets:', pending.map(b => b.items.map(i => i.mid)));
+    console.log('Available results:', Object.keys(resultMap));
+  }
   let changed = false, balDelta = 0;
   const updatedBets = currentUser.bets.map(bet => {
     if (bet.status !== 'pending') return bet;
